@@ -64,5 +64,4 @@ class RegexRule(Rule):
             with path.open(mode="w") as file:
                 file.write(modified)
 
-            self.git_add(path)
             raise FileChangedException(path)

@@ -72,7 +72,6 @@ class XmlRule(Rule):
 
         if any_changes:
             element_tree.write(path)
-            self.git_add(path)
             LOGGER.info(f"`{str(path)}` was modified")
             raise FileChangedException(path)
         else:
