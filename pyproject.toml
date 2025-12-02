@@ -1,0 +1,142 @@
+[project]
+name = "version-guard"
+description = "A pre-commit hook to check and enforce versions based on regex rules"
+version = "0.1.0"
+authors = [
+    { name = "Felix Cusson", email="felix.cusson@pm.me" }
+]
+maintainers = [
+    { name = "Felix Cusson", email="felix.cusson@pm.me" }
+]
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "pyyaml>=6.0.3",
+    "types-pyyaml>=6.0.12.20250915",
+]
+
+[project.urls]
+"Source" = "https://github.com/future-electronics/fabric-platform/shared/apps/version-guard"
+
+[dependency-groups]
+dev = [
+    "ruff",
+    "mypy",
+    "coverage[toml]",
+    "bandit",
+    "pylint",
+]
+
+# Build System
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project.scripts]
+version-guard = "version_guard.__main__:main"
+
+# Bandit
+[tool.bandit]
+exclude_dirs = ["tests", ".venv"]
+
+# Bumpversion
+[tool.bumpversion]
+commit = true
+message = "version-guard (update): {current_version} -> {new_version}"
+
+[[tool.bumpversion.files]]
+filename = "README.md"
+
+[[tool.bumpversion.files]]
+filename = "pyproject.toml"
+
+[[tool.bumpversion.files]]
+filename = "Taskfile.yml"
+
+# Coverage
+[tool.coverage.run]
+branch = true
+source = ["src/version_guard"]
+omit = ["*/tests/*"]
+
+[tool.coverage.report]
+show_missing = true
+
+[tool.coverage.xml]
+output = "build/reports/coverage.xml"
+
+# MyPy
+[tool.mypy]
+python_version = "3.11"
+strict = true
+ignore_missing_imports = true
+exclude = ["^tests/", "^.venv/"]
+
+[[tool.mypy.overrides]]
+module = ["tests.*"]
+ignore_errors = true
+
+# Pylint
+[tool.pylint.FORMAT]
+max-line-length = 80
+
+[tool.pylint.MASTER]
+ignore = [".venv", "tests"]
+
+# Ruff
+[tool.ruff]
+line-length = 80
+target-version = "py311"
+fix = true
+src = ["./src/"]
+exclude = ["tests/", ".venv/"]
+
+[tool.ruff.lint]
+select = ["D", "E", "F", "I", "UP", "B"]
+ignore = ["E501", "I001"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.ruff.lint.mccabe]
+max-complexity = 10
+
+[tool.ruff.lint.isort]
+case-sensitive = true
+force-sort-within-sections = true
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+"**/__init__.py" = ["D104"]
+
+# Sonar
+[tool.sonar]
+projectKey = "future-electronics.version-guard"
+organization = "future-electronics"
+sources = "./src/"
+tests = "./tests"
+
+[tool.sonar.python]
+version = "3.11"
+
+[tool.sonar.python.coverage]
+reportPaths = "build/reports/coverage.xml"
+
+[tool.sonar.python.pylint]
+reportPaths = "build/reports/pylint.txt"
+
+[tool.sonar.python.bandit]
+reportPaths = "build/reports/bandit.json"
+
+[tool.sonar.python.ruff]
+reportPaths = "build/reports/ruff.json"
+
+# UV
+[tool.uv]
+package = true

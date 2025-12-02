@@ -1,0 +1,6 @@
+- id: version-guard
+  name: Version Guard
+  description: A pre-commit hook to check and enforce versions based on regex rules
+  language: python
+  entry: version-guard
+  files: "\\.sqlproj$"

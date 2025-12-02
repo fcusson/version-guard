@@ -1,0 +1,56 @@
+version: "3"
+
+vars:
+  UNITTEST_ARGS: discover -s ./tests -p test_*.py
+  VERSION: "0.1.0"
+
+tasks:
+  tests:
+    cmd: uv run python -m unittest {{.UNITTEST_ARGS}}
+
+  coverage:
+    cmds:
+      - uv run coverage run --branch --omit=./tests/* -m unittest {{.UNITTEST_ARGS}}
+      - uv run coverage report
+
+  build:app:
+    cmd: uv build
+    silent: true
+
+  security:
+    cmd: uv run bandit -c pyproject.toml -r .
+
+  lint:
+    cmds:
+      - uv run ruff check .
+      - uv run mypy .
+      - uv run pylint ./src/
+
+  reports:
+    ignore_error: true
+    deps:
+      - coverage
+    cmds:
+      - uv run coverage xml
+      - uv run ruff check --output-format json -o build/reports/ruff.json
+      - uv run mypy --no-error-summary . > build/reports/mypy.txt
+      - 'uv run pylint ./src/ -r n --msg-template="{path}:{line}: [{msg_id}({symbol}), {obj}] {msg}" > build/reports/pylint.txt'
+      - uv run bandit -c pyproject.toml -r --format json --output build/reports/bandit.json .
+
+  sonar-upload:
+    vars:
+      BRANCH_NAME:
+        sh: git rev-parse --abbrev-ref HEAD
+    cmd: "uvx pysonar --sonar-branch-name {{.BRANCH_NAME}} || { uvx pysonar && uvx pysonar --sonar-branch-name {{.BRANCH_NAME}}; }"
+
+  uv:sync:
+    desc: "Sync environment to lockfile (install dependencies)"
+    cmd: uv sync
+
+  uv:lock:
+    desc: "Locks dependency versions"
+    cmd: uv lock
+
+  uv:cache-clear:
+    desc: "Clears the UV cache"
+    cmd: uv cache clear

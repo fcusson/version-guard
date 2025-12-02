@@ -1,0 +1,2 @@
+[console_scripts]
+version-guard = version_guard.__main__:main
