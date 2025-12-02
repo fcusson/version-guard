@@ -1,0 +1,15 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python Debugger: Version Guard Module",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "version-guard",
+            "args": [
+                "--help"
+            ],
+            "console": "integratedTerminal"
+        }
+    ]
+}
