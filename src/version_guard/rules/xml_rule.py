@@ -1,12 +1,16 @@
 """A Version Guard rule for xml parsing."""
 
 from collections.abc import Iterator
+from logging import getLogger
 from pathlib import Path
 from xml.etree.ElementTree import ElementTree, Element  # nosec
 
 from version_guard.exceptions import FileChangedException
 
 from .base import Rule
+
+
+LOGGER = getLogger(__name__)
 
 
 class XmlRule(Rule):
@@ -29,6 +33,13 @@ class XmlRule(Rule):
         self.element_name = element_name
         self.name_attr = name_attr
         self.version_attr = version_attr
+
+    def __repr__(self) -> str:
+        """Internal Repsentation of the rule."""
+        return (
+            f"<XmlRule glob=`{self.file_glob}`, package=`{self.package}`,"
+            f" version=`{self.version}`>"
+        )
 
     def get_version_nodes(self, root: Element) -> Iterator[Element]:
         """Returns an Iterator of all elements that fit the version config."""
@@ -62,4 +73,7 @@ class XmlRule(Rule):
         if any_changes:
             element_tree.write(path)
             self.git_add(path)
+            LOGGER.info(f"`{str(path)}` was modified")
             raise FileChangedException(path)
+        else:
+            LOGGER.info(f"`{str(path)}` unchanged")

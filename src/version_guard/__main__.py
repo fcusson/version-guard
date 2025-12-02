@@ -1,5 +1,6 @@
 """Entry point of the application."""
 
+import logging
 from logging import basicConfig, getLogger
 from pathlib import Path
 import sys
@@ -9,7 +10,7 @@ from .config import load_config
 from .exceptions import FileChangedException
 from .rules import get_rules, Rule
 
-basicConfig()
+basicConfig(level=logging.INFO)
 LOGGER = getLogger("version_guard")
 
 
@@ -18,7 +19,11 @@ def main() -> None:
     cli_config = get_args()
     config = load_config(cli_config["config"])
 
+    LOGGER.info("parsing %d files", len(cli_config["files"]))
+    LOGGER.info("Running %d rules", len(config["rules"]))
+
     for rule in get_rules(config["rules"]):
+        LOGGER.info(f"Parsing files with rule `{repr(rule)}`")
         _parse_files(rule, cli_config["files"])
 
 

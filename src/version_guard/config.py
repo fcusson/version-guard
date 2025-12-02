@@ -17,6 +17,14 @@ class Rule(TypedDict):
     version: str
 
 
+class TypelessRule(TypedDict):
+    """A version guard rule without the type key."""
+
+    name: str
+    file_glob: str
+    version: str
+
+
 class XmlRule(Rule):
     """An XML based Version Guard rule."""
 
@@ -40,9 +48,6 @@ class VersionGuardConfig(TypedDict):
 
 def load_config(path: Path) -> VersionGuardConfig:
     """Retrieves the config from the path provided."""
-    if not path.is_file():
-        return {"rules": []}
-
     with path.open(mode="r") as file:
         config = yaml.safe_load(file)
 
