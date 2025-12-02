@@ -33,7 +33,7 @@ def get_args() -> CliConfig:
             "./version-guard.yaml"
         ),
         type=expand_path,
-        default=Path("./version-guard.yaml"),
+        default=Path("./.version-guard.yaml"),
     )
 
     config = cast("CliConfig", vars(parser.parse_args()))
