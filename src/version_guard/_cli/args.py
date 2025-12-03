@@ -12,6 +12,8 @@ class CliConfig(TypedDict):
 
     files: list[Path]
     config: Path
+    force: bool
+    workdir: Path
 
 
 def get_args() -> CliConfig:
@@ -34,6 +36,21 @@ def get_args() -> CliConfig:
         ),
         type=expand_path,
         default=Path("./.version-guard.yaml"),
+    )
+
+    parser.add_argument(
+        "-w",
+        "--workdir",
+        help="Working directory root. Defaults to current working directory.",
+        type=expand_path,
+        default=Path.cwd(),
+    )
+
+    parser.add_argument(
+        "-f",
+        "--force",
+        help="Force all files matching to glob to be checked.",
+        action="store_true",
     )
 
     config = cast("CliConfig", vars(parser.parse_args()))

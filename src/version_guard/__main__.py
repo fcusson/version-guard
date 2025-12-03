@@ -24,7 +24,13 @@ def main() -> None:
 
     for rule in get_rules(config["rules"]):
         LOGGER.info(f"Parsing files with rule `{repr(rule)}`")
-        _parse_files(rule, cli_config["files"])
+
+        if cli_config["force"]:
+            files = rule.find_all(cli_config["workdir"])
+        else:
+            files = cli_config["files"]
+
+        _parse_files(rule, files)
 
 
 def _parse_files(rule: Rule, files: list[Path]) -> None:
