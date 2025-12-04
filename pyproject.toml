@@ -1,7 +1,7 @@
 [project]
 name = "version-guard"
 description = "A pre-commit hook to check and enforce versions based on regex rules"
-version = "0.2.0"
+version = "0.3.0"
 authors = [
     { name = "Felix Cusson", email="felix.cusson@pm.me" }
 ]

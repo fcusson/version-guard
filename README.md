@@ -1,6 +1,6 @@
 # Version Guard
 
-![version](https://img.shields.io/badge/version-guard-0.2.0-blue)
+![version](https://img.shields.io/badge/version-guard-0.3.0-blue)
 ![python](https://img.shields.io/badge/python-3.11-blue?logo=python&logoColor=white)
 
 A pre-commit hook to check and enforce versions based on regex rules
