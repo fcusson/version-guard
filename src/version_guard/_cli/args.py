@@ -25,6 +25,7 @@ def get_args() -> CliConfig:
         nargs="*",
         help="Files to parse",
         type=expand_path,
+        default=[],
     )
 
     parser.add_argument(

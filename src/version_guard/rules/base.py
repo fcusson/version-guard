@@ -20,16 +20,7 @@ class Rule(ABC):
 
     def find_all(self, root: Path) -> list[Path]:
         """Returns a list of all files that matches the glob."""
-        files = []
-
-        for child in root.iterdir():
-            if child.is_dir():
-                files.extend(self.find_all(child))
-
-            if child.match(self.file_glob):
-                files.append(child)
-
-        return files
+        return list(root.rglob(self.file_glob))
 
     @staticmethod
     def git_add(path: Path) -> None:
