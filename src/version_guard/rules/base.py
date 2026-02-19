@@ -14,8 +14,10 @@ class Rule(ABC):
         self.file_glob = file_glob.strip()
         self.version = version.strip()
 
-    def invalid_version(self, current: str) -> bool:
+    def invalid_version(self, current: str | None) -> bool:
         """Returns True if the current version doesn't match target."""
+        if current is None:
+            return True
         return current.strip() != self.version
 
     def find_all(self, root: Path) -> list[Path]:

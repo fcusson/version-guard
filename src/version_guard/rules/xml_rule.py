@@ -5,7 +5,7 @@ from logging import getLogger
 from pathlib import Path
 from xml.etree.ElementTree import ElementTree, Element  # nosec
 
-from version_guard.exceptions import FileChangedException
+from version_guard.exceptions import FileChangedException, ParsingException
 
 from .base import Rule
 
@@ -60,6 +60,8 @@ class XmlRule(Rule):
 
         element_tree = ElementTree(file=path)
         root = element_tree.getroot()
+        if root is None:
+            raise ParsingException(f"`{str(path)}` has no XML root element.")
 
         any_changes = False
 
